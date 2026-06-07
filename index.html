@@ -930,27 +930,47 @@ const m=url.match(/\/d\/([a-zA-Z0-9_-]+)/);
 return m?m[1]:null;
 }
 
-// Fetch a Google Doc as plain text via export
+// Fetch a Google Doc as plain text — tries multiple strategies
 async function fetchDocText(docUrl){
 const docId=extractDocId(docUrl);
 if(!docId)return null;
-const exportUrl=`https://docs.google.com/document/d/${docId}/export?format=txt`;
-const proxies=[
-u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-u=>`https://corsproxy.io/?url=${encodeURIComponent(u)}`,
-u=>`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+
+// Strategy 1: allorigins wrapping the export?format=txt URL
+// allorigins follows redirects and returns the final content
+const exportTxt=`https://docs.google.com/document/d/${docId}/export?format=txt`;
+const exportHtml=`https://docs.google.com/document/d/${docId}/export?format=html`;
+
+const strategies=[
+  // allorigins with txt export (most reliable — follows the redirect)
+  ()=>fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(exportTxt)}`,{cache:'no-store'}),
+  // corsproxy.io with txt export
+  ()=>fetch(`https://corsproxy.io/?url=${encodeURIComponent(exportTxt)}`,{cache:'no-store'}),
+  // allorigins with html export (strip tags after)
+  ()=>fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(exportHtml)}`,{cache:'no-store'}),
+  // corsproxy.io html export
+  ()=>fetch(`https://corsproxy.io/?url=${encodeURIComponent(exportHtml)}`,{cache:'no-store'}),
+  // allorigins /get endpoint (returns JSON with contents field)
+  ()=>fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(exportTxt)}`,{cache:'no-store'}).then(async r=>{
+    const j=await r.json();
+    // fake a response-like object
+    return {ok:!!(j&&j.contents&&j.contents.length>20),text:()=>Promise.resolve(j.contents||'')};
+  }),
 ];
-// Try direct first
-try{
-const r=await Promise.race([fetch(exportUrl,{cache:'no-store'}),new Promise((_,rej)=>setTimeout(()=>rej(),6000))]);
-if(r&&r.ok){const t=await r.text();if(t&&t.length>50)return t;}
-}catch(e){}
-// Try proxies
-for(const makeUrl of proxies){
-try{
-const r=await Promise.race([fetch(makeUrl(exportUrl),{cache:'no-store'}),new Promise((_,rej)=>setTimeout(()=>rej(),8000))]);
-if(r&&r.ok){const t=await r.text();if(t&&t.length>50)return t;}
-}catch(e){}
+
+for(const strategy of strategies){
+  try{
+    const r=await Promise.race([strategy(),new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),10000))]);
+    if(!r||!r.ok)continue;
+    let t=await r.text();
+    if(!t||t.length<20)continue;
+    // If we got HTML, strip tags to get plain text
+    if(t.trim().startsWith('<')&&t.includes('</html>')){
+      const tmp=document.createElement('div');
+      tmp.innerHTML=t;
+      t=tmp.innerText||tmp.textContent||'';
+    }
+    if(t&&t.length>20)return t;
+  }catch(e){/* try next */}
 }
 return null;
 }
@@ -1105,7 +1125,9 @@ progressFill.style.width=`${Math.round((i/approved.length)*100)}%`;
 
 const docUrl=MEAL_DOC_URLS[mealName];
 if(!docUrl){
-notFound.push({meal:mealName,reason:'No recipe linked'});
+// Check if we have ANY doc URLs at all — if not, sheet column D may not have loaded
+const hasAnyUrls=Object.keys(MEAL_DOC_URLS).length>0;
+notFound.push({meal:mealName,reason:hasAnyUrls?'No recipe linked in column D':'Sheet column D not loaded — try refreshing meals (↻ button)'});
 continue;
 }
 const text=await fetchDocText(docUrl);
@@ -1127,9 +1149,15 @@ progressText.textContent='Building shopping list…';
 
 if(!allParsed.length){
 errorEl.style.display='block';
-errorEl.textContent='Could not retrieve any recipes. Check that your Google Docs are set to "Anyone with the link can view".';
+const failDetail=notFound.map(({meal,reason})=>`${meal}: ${reason}`).join('<br>');
+errorEl.innerHTML=`<strong>Could not retrieve any recipes.</strong><br><br>
+Failures:<br>${failDetail}<br><br>
+Things to check:<br>
+• Each Google Doc must be shared as <em>"Anyone with the link can view"</em><br>
+• The link in column D of the spreadsheet must be the full Google Docs URL<br>
+• Try refreshing and generating again — proxy services occasionally time out`;
 progressEl.style.display='none';
-btn.disabled=false;btn.textContent='Generate list';
+btn.disabled=false;btn.textContent='Try again';
 return;
 }
 
