@@ -397,6 +397,8 @@ The meal list couldn't be loaded. This can happen if:<br>
 <script>
 // ── SHEET CONFIG ──────────────────────────────────
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTUkuvUMaqHywa3kG8lL47KPjnIAfIuq38QuCm5Q0BgjMeSbsaiIiynrTl2rZMtfYuaaSk4XJFsuVTo/pub?gid=38705596&single=true&output=csv';
+// HTML export of same sheet — preserves hyperlink hrefs in column D
+const HTML_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTUkuvUMaqHywa3kG8lL47KPjnIAfIuq38QuCm5Q0BgjMeSbsaiIiynrTl2rZMtfYuaaSk4XJFsuVTo/pub?gid=38705596&single=true&output=html';
 
 // ── CONSTANTS ─────────────────────────────────────
 const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
@@ -627,6 +629,36 @@ meals.push({n:meal,c:cats});
 return meals;
 }
 
+// Parse the HTML export of the sheet to extract real hyperlink URLs from column D
+// Google Sheets HTML export wraps linked cells in <a href="..."> tags
+function parseHtmlForDocUrls(html){
+const urls={};
+try{
+  const tmp=document.createElement('div');
+  tmp.innerHTML=html;
+  const rows=tmp.querySelectorAll('tr');
+  rows.forEach((tr,ri)=>{
+    if(ri===0)return; // skip header row
+    const cells=tr.querySelectorAll('td');
+    if(cells.length<4)return;
+    const mealName=(cells[0]?.textContent||'').trim();
+    if(!mealName)return;
+    // Column D is index 3 — look for an anchor tag inside it
+    const colD=cells[3];
+    if(!colD)return;
+    const a=colD.querySelector('a');
+    if(a&&a.href){
+      // Google Sheets wraps URLs in a google redirect — unwrap it
+      let href=a.href;
+      const qMatch=href.match(/[?&]q=([^&]+)/);
+      if(qMatch)href=decodeURIComponent(qMatch[1]);
+      if(href&&href.includes('docs.google.com'))urls[mealName]=href;
+    }
+  });
+}catch(e){}
+return urls;
+}
+
 // ── LOAD FROM SHEET ───────────────────────────────
 async function loadMeals(){
 setStatus('loading','Loading meal list from Google Sheets…');
@@ -641,8 +673,27 @@ if(meals&&meals.length>0){
 MEALS=meals;
 ALL_CATS=[...new Set(MEALS.flatMap(m=>m.c))].sort();
 usingFallback=false;
+// Now fetch HTML export to get real hyperlink URLs from column D
+// (CSV export only gives display text, not the underlying href)
+setStatus('loading',`${MEALS.length} meals loaded — fetching recipe links…`);
+const htmlSources=[HTML_URL,...proxies.map(p=>p(HTML_URL))];
+for(const src of htmlSources){
+  try{
+    const r=await Promise.race([fetch(src,{cache:'no-store'}),new Promise((_,rej)=>setTimeout(()=>rej(),8000))]);
+    if(r&&r.ok){
+      const html=await r.text();
+      const htmlUrls=parseHtmlForDocUrls(html);
+      const count=Object.keys(htmlUrls).length;
+      if(count>0){
+        // Merge: HTML URLs override any plain-text URLs from CSV
+        Object.assign(MEAL_DOC_URLS,htmlUrls);
+        break;
+      }
+    }
+  }catch(e){}
+}
 try{localStorage.setItem('mplanner6_meals_v2',JSON.stringify(MEALS));localStorage.setItem('mplanner6_docurls',JSON.stringify(MEAL_DOC_URLS));localStorage.setItem('mplanner6_sides',JSON.stringify(MEAL_SIDES));}catch(e){}
-setStatus('ok',`${MEALS.length} meals loaded from your Google Sheet`);
+setStatus('ok',`${MEALS.length} meals loaded · ${Object.keys(MEAL_DOC_URLS).length} recipes linked`);
 showScreen('main');return;
 }
 const cached=localStorage.getItem('mplanner6_meals_v2');
