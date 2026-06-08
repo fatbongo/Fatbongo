@@ -7,15 +7,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
---bg:#000000;--surface:#111110;--surface2:#1c1c1a;--border:#2e2e2b;--border2:#3e3e3a;
---text:#e8e4dc;--text2:#9a9590;--text3:#5a5550;
---forest:#2a5212;--forest-mid:#5a9a28;--forest-light:#182810;--forest-border:#4a8020;
---gold:#c07820;--gold-light:#1e1608;--gold-border:#c07820;
---red:#c03030;--red-light:#1e0808;--red-border:#c06060;
---blue:#2a6aaa;--blue-light:#081420;--blue-border:#4a8acd;
---plum:#6a4aaa;--plum-light:#120e1e;--plum-border:#8a62cc;
---teal:#0e7070;--teal-light:#081818;--teal-border:#2a9090;
---r:10px;--rs:7px;--shadow:0 1px 3px rgba(0,0,0,0.5),0 4px 12px rgba(0,0,0,0.4);
+--bg:#F4F1EC;--surface:#FDFCFA;--surface2:#EDEAE3;--border:#DDD9D0;--border2:#C9C4BA;
+--text:#18150F;--text2:#6B6660;--text3:#A09B94;
+--forest:#1E3D0A;--forest-mid:#4A7C1F;--forest-light:#E8F4D9;--forest-border:#8EBF52;
+--gold:#7A4A08;--gold-light:#FDF0D5;--gold-border:#D4972A;
+--red:#8B2020;--red-light:#FCEAEA;--red-border:#D98080;
+--blue:#14477A;--blue-light:#E4F0FB;--blue-border:#6BAAD8;
+--plum:#4A2D7A;--plum-light:#F0EBFA;--plum-border:#A882D8;
+--teal:#0D5C5C;--teal-light:#E0F5F5;--teal-border:#4AACAC;
+--r:10px;--rs:7px;--shadow:0 1px 3px rgba(0,0,0,0.07),0 4px 12px rgba(0,0,0,0.04);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
@@ -70,17 +70,17 @@ body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--text);min-he
 .dot-locked{background:var(--plum);}
 .meal-info{flex:1;min-width:0;}
 .meal-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.meal-cats{display:none;}
+.meal-cats{display:flex;gap:3px;flex-wrap:wrap;margin-top:3px;}
 .cpill{font-size:10px;padding:1px 6px;border-radius:20px;background:var(--surface2);color:var(--text2);border:1px solid var(--border);}
 .meal-btns{display:flex;gap:4px;flex-shrink:0;}
-.mbtn{width:27px;height:27px;border-radius:6px;border:1px solid var(--border2);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:var(--text2);transition:all 0.12s;flex-shrink:0;}
-.mbtn:hover{background:var(--surface2);}
-.mbtn.ok:hover{background:var(--forest-light);border-color:var(--forest-border);color:var(--forest-mid);}
+.mbtn{width:27px;height:27px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:var(--text2);transition:all 0.12s;flex-shrink:0;}
+.mbtn:hover{background:var(--border2);}
+.mbtn.ok:hover{background:var(--forest-light);border-color:var(--forest-border);color:var(--forest);}
 .mbtn.rej:hover{background:var(--red-light);border-color:var(--red-border);color:var(--red);}
-.mbtn.lock-on{background:transparent;border-color:var(--plum-border);color:var(--plum-border);}
-.mbtn.approved-st{background:transparent;border-color:var(--forest-border);color:var(--forest-mid);}
+.mbtn.lock-on{background:var(--plum-light);border-color:var(--plum-border);color:var(--plum);}
+.mbtn.approved-st{background:var(--forest-light);border-color:var(--forest-border);color:var(--forest);}
 .mbtn.approved-st:hover{background:var(--gold-light);border-color:var(--gold-border);color:var(--gold);}
-.mbtn.move-on{background:transparent;border-color:var(--gold-border);color:var(--gold);}
+.mbtn.move-on{background:var(--gold-light);border-color:var(--gold-border);color:var(--gold);}
 .day-actions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
 .day-act-btn{font-size:11px;font-weight:500;padding:5px 10px;border-radius:6px;border:1px dashed var(--border2);background:var(--surface2);color:var(--text2);cursor:pointer;transition:all 0.12s;font-family:'Jost',sans-serif;}
 .day-act-btn:hover{background:var(--border);border-style:solid;color:var(--text);}
@@ -88,14 +88,12 @@ body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--text);min-he
 .day-act-btn.tgen:hover{background:var(--plum-border);color:#fff;}
 .no-meal{font-size:12px;color:var(--text3);font-style:italic;}
 .takeaway-label{font-size:13px;color:var(--plum);}
-.approve-all{width:100%;padding:9px;background:var(--forest-light);color:var(--forest-mid);border:1px solid var(--forest-border);border-radius:var(--rs);font-size:13px;font-weight:500;cursor:pointer;margin-bottom:10px;font-family:'Jost',sans-serif;}
-.approve-all:hover{background:#1e3a14;}
+.approve-all{width:100%;padding:9px;background:var(--forest-light);color:var(--forest);border:1px solid var(--forest-border);border-radius:var(--rs);font-size:13px;font-weight:500;cursor:pointer;margin-bottom:10px;font-family:'Jost',sans-serif;}
+.approve-all:hover{background:#cde8a4;}
 .reset-btn{width:100%;padding:9px;background:var(--red-light);color:var(--red);border:1px solid var(--red-border);border-radius:var(--rs);font-size:12px;font-weight:500;cursor:pointer;margin-top:8px;font-family:'Jost',sans-serif;}
-.reset-btn:hover{background:#2e0808;}
-.approve-all-shop-btn{flex:1;padding:9px;background:var(--forest-light);color:var(--forest-mid);border:1px solid var(--forest-border);border-radius:var(--rs);font-size:12px;font-weight:500;cursor:pointer;font-family:'Jost',sans-serif;transition:background 0.15s;}
-.approve-all-shop-btn:hover{background:#1e3a14;}
+.reset-btn:hover{background:#f5c8c8;}
 .tally-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px;box-shadow:var(--shadow);}
-.tally-title{display:none;}
+.tally-title{font-family:'Playfair Display',serif;font-size:13px;font-weight:500;margin-bottom:10px;}
 .tally-row{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);}
 .tally-row:last-child{border-bottom:none;}
 .tally-cat{font-size:11px;color:var(--text2);}
@@ -222,42 +220,42 @@ body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--text);min-he
 .sides-col-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;padding:2px 0 3px;margin-bottom:1px;border-bottom:1px solid;}
 .sides-btn{font-size:11px;font-weight:500;padding:4px 9px;border-radius:6px;border:1px solid;background:transparent;cursor:pointer;text-align:left;transition:all 0.12s;font-family:'Jost',sans-serif;white-space:nowrap;}
 
-/* colour themes per group — dark mode */
-.sides-col.sc-veg .sides-col-lbl{color:#5a9a5a;border-color:#2a5a2a;}
-.sides-col.sc-veg .sides-btn{color:#5a9a5a;border-color:#2a5a2a;}
-.sides-col.sc-veg .sides-btn:hover,.sides-col.sc-veg .sides-btn.on{background:#182818;border-color:#4a8a4a;color:#7acc7a;}
+/* colour themes per group */
+.sides-col.sc-veg .sides-col-lbl{color:#2d6a2d;border-color:#8cc88c;}
+.sides-col.sc-veg .sides-btn{color:#2d6a2d;border-color:#b8ddb8;}
+.sides-col.sc-veg .sides-btn:hover,.sides-col.sc-veg .sides-btn.on{background:#e6f4e6;border-color:#8cc88c;}
 
-.sides-col.sc-potato .sides-col-lbl{color:#c07820;border-color:#5a3a10;}
-.sides-col.sc-potato .sides-btn{color:#c07820;border-color:#5a3a10;}
-.sides-col.sc-potato .sides-btn:hover,.sides-col.sc-potato .sides-btn.on{background:#1e1208;border-color:#c07820;color:#e09840;}
+.sides-col.sc-potato .sides-col-lbl{color:#7a4a08;border-color:#d4972a;}
+.sides-col.sc-potato .sides-btn{color:#7a4a08;border-color:#e8c87a;}
+.sides-col.sc-potato .sides-btn:hover,.sides-col.sc-potato .sides-btn.on{background:#fdf0d5;border-color:#d4972a;}
 
-.sides-col.sc-grain .sides-col-lbl{color:#aa8040;border-color:#4a3818;}
-.sides-col.sc-grain .sides-btn{color:#aa8040;border-color:#4a3818;}
-.sides-col.sc-grain .sides-btn:hover,.sides-col.sc-grain .sides-btn.on{background:#181008;border-color:#aa8040;color:#ccaa60;}
+.sides-col.sc-grain .sides-col-lbl{color:#5a3e1b;border-color:#b08050;}
+.sides-col.sc-grain .sides-btn{color:#5a3e1b;border-color:#d0a878;}
+.sides-col.sc-grain .sides-btn:hover,.sides-col.sc-grain .sides-btn.on{background:#f5ead8;border-color:#b08050;}
 
-.sides-col.sc-pasta .sides-col-lbl{color:#4a8acd;border-color:#1a3a5a;}
-.sides-col.sc-pasta .sides-btn{color:#4a8acd;border-color:#1a3a5a;}
-.sides-col.sc-pasta .sides-btn:hover,.sides-col.sc-pasta .sides-btn.on{background:#081420;border-color:#4a8acd;color:#6aaaef;}
+.sides-col.sc-pasta .sides-col-lbl{color:#14477a;border-color:#6baad8;}
+.sides-col.sc-pasta .sides-btn{color:#14477a;border-color:#aacde8;}
+.sides-col.sc-pasta .sides-btn:hover,.sides-col.sc-pasta .sides-btn.on{background:#e4f0fb;border-color:#6baad8;}
 
-.sides-col.sc-salad .sides-col-lbl{color:#2a9090;border-color:#0a3838;}
-.sides-col.sc-salad .sides-btn{color:#2a9090;border-color:#0a3838;}
-.sides-col.sc-salad .sides-btn:hover,.sides-col.sc-salad .sides-btn.on{background:#081818;border-color:#2a9090;color:#4ab8b8;}
+.sides-col.sc-salad .sides-col-lbl{color:#0d5c5c;border-color:#4aacac;}
+.sides-col.sc-salad .sides-btn{color:#0d5c5c;border-color:#8acfcf;}
+.sides-col.sc-salad .sides-btn:hover,.sides-col.sc-salad .sides-btn.on{background:#e0f5f5;border-color:#4aacac;}
 
-.sides-col.sc-indian .sides-col-lbl{color:#d07030;border-color:#5a2e10;}
-.sides-col.sc-indian .sides-btn{color:#d07030;border-color:#5a2e10;}
-.sides-col.sc-indian .sides-btn:hover,.sides-col.sc-indian .sides-btn.on{background:#1e0e08;border-color:#d07030;color:#f09050;}
+.sides-col.sc-indian .sides-col-lbl{color:#6b2d00;border-color:#c06820;}
+.sides-col.sc-indian .sides-btn{color:#6b2d00;border-color:#e09858;}
+.sides-col.sc-indian .sides-btn:hover,.sides-col.sc-indian .sides-btn.on{background:#faebd8;border-color:#c06820;}
 
-.sides-col.sc-gravy .sides-col-lbl{color:#8a62cc;border-color:#3a2a5a;}
-.sides-col.sc-gravy .sides-btn{color:#8a62cc;border-color:#3a2a5a;}
-.sides-col.sc-gravy .sides-btn:hover,.sides-col.sc-gravy .sides-btn.on{background:#120e1e;border-color:#8a62cc;color:#aa82ee;}
+.sides-col.sc-gravy .sides-col-lbl{color:#4a2d7a;border-color:#a882d8;}
+.sides-col.sc-gravy .sides-btn{color:#4a2d7a;border-color:#c8a8e8;}
+.sides-col.sc-gravy .sides-btn:hover,.sides-col.sc-gravy .sides-btn.on{background:#f0ebfa;border-color:#a882d8;}
 
-.sides-col.sc-bread .sides-col-lbl{color:#a07848;border-color:#3a2a18;}
-.sides-col.sc-bread .sides-btn{color:#a07848;border-color:#3a2a18;}
-.sides-col.sc-bread .sides-btn:hover,.sides-col.sc-bread .sides-btn.on{background:#181008;border-color:#a07848;color:#c09868;}
+.sides-col.sc-bread .sides-col-lbl{color:#5c3d11;border-color:#a07040;}
+.sides-col.sc-bread .sides-btn{color:#5c3d11;border-color:#c09868;}
+.sides-col.sc-bread .sides-btn:hover,.sides-col.sc-bread .sides-btn.on{background:#f5e8d5;border-color:#a07040;}
 
-.sides-col.sc-other .sides-col-lbl{color:#8a8580;border-color:#3a3835;}
-.sides-col.sc-other .sides-btn{color:#8a8580;border-color:#3a3835;}
-.sides-col.sc-other .sides-btn:hover,.sides-col.sc-other .sides-btn.on{background:#1a1a18;border-color:#8a8580;color:#aaa59f;}
+.sides-col.sc-other .sides-col-lbl{color:#555;border-color:#aaa;}
+.sides-col.sc-other .sides-btn{color:#555;border-color:#ccc;}
+.sides-col.sc-other .sides-btn:hover,.sides-col.sc-other .sides-btn.on{background:#f0f0f0;border-color:#aaa;}
 
 /* Shopping list sides display */
 .sl-meal-sides{font-size:11px;color:var(--text2);margin-top:2px;display:flex;flex-wrap:wrap;gap:3px;}
@@ -397,8 +395,6 @@ The meal list couldn't be loaded. This can happen if:<br>
 <script>
 // ── SHEET CONFIG ──────────────────────────────────
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTUkuvUMaqHywa3kG8lL47KPjnIAfIuq38QuCm5Q0BgjMeSbsaiIiynrTl2rZMtfYuaaSk4XJFsuVTo/pub?gid=38705596&single=true&output=csv';
-// HTML export of same sheet — preserves hyperlink hrefs in column D
-const HTML_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTUkuvUMaqHywa3kG8lL47KPjnIAfIuq38QuCm5Q0BgjMeSbsaiIiynrTl2rZMtfYuaaSk4XJFsuVTo/pub?gid=38705596&single=true&output=html';
 
 // ── CONSTANTS ─────────────────────────────────────
 const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
@@ -495,7 +491,7 @@ let MEALS = [];
 let ALL_CATS = [];
 let usingFallback = false;
 
-// meal name -> doc URL, populated from column D of the sheet
+// meal name -> doc URL, populated from column E of the sheet
 let MEAL_DOC_URLS = {};
 
 function defaultState(){return{dayTypes:{Monday:null,Tuesday:null,Wednesday:null,Thursday:null,Friday:null,Saturday:null,Sunday:null},includedDays:{Monday:true,Tuesday:true,Wednesday:true,Thursday:true,Friday:true,Saturday:true,Sunday:true},catCounts:{Poultry:0,'Red Meat':0,Fish:0,Veggie:0},weeks:{},weekOffset:0,selectedSides:{}};}
@@ -621,42 +617,12 @@ if(sidesCell){
   const rawSides=sidesCell.split(',').map(s=>s.trim()).filter(Boolean);
   if(rawSides.length)MEAL_SIDES[meal]=rawSides;
 }
-// Column D (index 3) = Google Doc URL
-const docUrl=(parts[3]||'').trim();
+// Column E (index 4) = Google Doc URL
+const docUrl=(parts[4]||'').trim();
 if(docUrl)MEAL_DOC_URLS[meal]=docUrl;
 meals.push({n:meal,c:cats});
 }
 return meals;
-}
-
-// Parse the HTML export of the sheet to extract real hyperlink URLs from column D
-// Google Sheets HTML export wraps linked cells in <a href="..."> tags
-function parseHtmlForDocUrls(html){
-const urls={};
-try{
-  const tmp=document.createElement('div');
-  tmp.innerHTML=html;
-  const rows=tmp.querySelectorAll('tr');
-  rows.forEach((tr,ri)=>{
-    if(ri===0)return; // skip header row
-    const cells=tr.querySelectorAll('td');
-    if(cells.length<4)return;
-    const mealName=(cells[0]?.textContent||'').trim();
-    if(!mealName)return;
-    // Column D is index 3 — look for an anchor tag inside it
-    const colD=cells[3];
-    if(!colD)return;
-    const a=colD.querySelector('a');
-    if(a&&a.href){
-      // Google Sheets wraps URLs in a google redirect — unwrap it
-      let href=a.href;
-      const qMatch=href.match(/[?&]q=([^&]+)/);
-      if(qMatch)href=decodeURIComponent(qMatch[1]);
-      if(href&&href.includes('docs.google.com'))urls[mealName]=href;
-    }
-  });
-}catch(e){}
-return urls;
 }
 
 // ── LOAD FROM SHEET ───────────────────────────────
@@ -673,27 +639,8 @@ if(meals&&meals.length>0){
 MEALS=meals;
 ALL_CATS=[...new Set(MEALS.flatMap(m=>m.c))].sort();
 usingFallback=false;
-// Now fetch HTML export to get real hyperlink URLs from column D
-// (CSV export only gives display text, not the underlying href)
-setStatus('loading',`${MEALS.length} meals loaded — fetching recipe links…`);
-const htmlSources=[HTML_URL,...proxies.map(p=>p(HTML_URL))];
-for(const src of htmlSources){
-  try{
-    const r=await Promise.race([fetch(src,{cache:'no-store'}),new Promise((_,rej)=>setTimeout(()=>rej(),8000))]);
-    if(r&&r.ok){
-      const html=await r.text();
-      const htmlUrls=parseHtmlForDocUrls(html);
-      const count=Object.keys(htmlUrls).length;
-      if(count>0){
-        // Merge: HTML URLs override any plain-text URLs from CSV
-        Object.assign(MEAL_DOC_URLS,htmlUrls);
-        break;
-      }
-    }
-  }catch(e){}
-}
-try{localStorage.setItem('mplanner6_meals_v2',JSON.stringify(MEALS));localStorage.setItem('mplanner6_docurls',JSON.stringify(MEAL_DOC_URLS));localStorage.setItem('mplanner6_sides',JSON.stringify(MEAL_SIDES));}catch(e){}
-setStatus('ok',`${MEALS.length} meals loaded · ${Object.keys(MEAL_DOC_URLS).length} recipes linked`);
+try{localStorage.setItem('mplanner6_meals_v2',JSON.stringify(MEALS));localStorage.setItem('mplanner6_docurls_v2',JSON.stringify(MEAL_DOC_URLS));localStorage.setItem('mplanner6_sides',JSON.stringify(MEAL_SIDES));}catch(e){}
+setStatus('ok',`${MEALS.length} meals loaded from your Google Sheet`);
 showScreen('main');return;
 }
 const cached=localStorage.getItem('mplanner6_meals_v2');
@@ -701,7 +648,7 @@ if(cached){
 try{
 MEALS=JSON.parse(cached);
 ALL_CATS=[...new Set(MEALS.flatMap(m=>m.c))].sort();
-const cachedUrls=localStorage.getItem('mplanner6_docurls');
+const cachedUrls=localStorage.getItem('mplanner6_docurls_v2');
 if(cachedUrls)MEAL_DOC_URLS=JSON.parse(cachedUrls);
 const cachedSides=localStorage.getItem('mplanner6_sides');
 if(cachedSides)MEAL_SIDES=JSON.parse(cachedSides);
@@ -784,7 +731,6 @@ save();showTab('plan');toast('Plan generated!');
 function approve(wk,day,mi){const s=S.weeks[wk].find(s=>s.day===day);if(mi===0)s.status1='approved';else s.status2='approved';save();renderPlan();}
 function unapprove(wk,day,mi){const s=S.weeks[wk].find(s=>s.day===day);if(mi===0)s.status1='pending';else s.status2='pending';save();renderPlan();}
 function approveAll(wk){S.weeks[wk].forEach(s=>{if(s.meal1&&s.status1==='pending')s.status1='approved';if(s.meal2&&s.status2==='pending')s.status2='approved';});save();renderPlan();toast('All approved!');}
-function approveAllAndShop(wk){S.weeks[wk].forEach(s=>{if(s.meal1&&s.status1==='pending')s.status1='approved';if(s.meal2&&s.status2==='pending')s.status2='approved';});save();showTab('shopping');toast('All approved!');}
 function toggleLock(wk,day,mi){const s=S.weeks[wk].find(s=>s.day===day);if(mi===0)s.locked1=!s.locked1;else s.locked2=!s.locked2;save();renderPlan();}
 function removeMeal(wk,day,mi){const s=S.weeks[wk].find(s=>s.day===day);if(mi===0){s.meal1=null;s.status1=null;s.cat1=null;s.locked1=false;}else{s.meal2=null;s.status2=null;s.cat2=null;s.locked2=false;}save();renderPlan();}
 
@@ -839,13 +785,10 @@ if(dtype==='takeaway'&&!slot.meal1){html+=`<div class="takeaway-label">🛵 Take
 else if(!slot.meal1){html+=`<div class="no-meal">No meal assigned</div><div class="day-actions"><button class="day-act-btn" onclick="startGenerate('${wk}','${day}',0)">+ Generate meal</button></div>`;}
 else{html+=renderMealRow(slot.meal1,slot.status1,wk,day,0);}
 if(slot.meal2){html+=renderMealRow(slot.meal2,slot.status2,wk,day,1);}
-else if(slot.meal1&&dtype!=='takeaway'){html+=`<div class="day-actions" style="margin-top:6px;justify-content:flex-end"><button class="day-act-btn" onclick="startGenerate('${wk}','${day}',1,[])">+ Add an extra meal</button></div>`;}
+else if(slot.meal1&&dtype!=='takeaway'){html+=`<div class="day-actions" style="margin-top:6px"><button class="day-act-btn" onclick="startGenerate('${wk}','${day}',1,[])">+ Add an extra meal</button></div>`;}
 html+=`</div></div>`;
 });
-html+=`<div style="display:flex;gap:8px;margin-top:8px;">`;
-html+=`<button class="approve-all-shop-btn" onclick="approveAllAndShop('${wk}')">✓ Approve all &amp; go to shopping list</button>`;
-html+=`<button class="reset-btn" style="margin-top:0;flex-shrink:0;width:auto;padding:9px 14px;" onclick="resetWeek()">↺ Start again</button>`;
-html+=`</div>`;
+html+=`<button class="reset-btn" onclick="resetWeek()">↺ Start again — clear this week</button>`;
 body.innerHTML=html;
 }
 
@@ -981,47 +924,27 @@ const m=url.match(/\/d\/([a-zA-Z0-9_-]+)/);
 return m?m[1]:null;
 }
 
-// Fetch a Google Doc as plain text — tries multiple strategies
+// Fetch a Google Doc as plain text via export
 async function fetchDocText(docUrl){
 const docId=extractDocId(docUrl);
 if(!docId)return null;
-
-// Strategy 1: allorigins wrapping the export?format=txt URL
-// allorigins follows redirects and returns the final content
-const exportTxt=`https://docs.google.com/document/d/${docId}/export?format=txt`;
-const exportHtml=`https://docs.google.com/document/d/${docId}/export?format=html`;
-
-const strategies=[
-  // allorigins with txt export (most reliable — follows the redirect)
-  ()=>fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(exportTxt)}`,{cache:'no-store'}),
-  // corsproxy.io with txt export
-  ()=>fetch(`https://corsproxy.io/?url=${encodeURIComponent(exportTxt)}`,{cache:'no-store'}),
-  // allorigins with html export (strip tags after)
-  ()=>fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(exportHtml)}`,{cache:'no-store'}),
-  // corsproxy.io html export
-  ()=>fetch(`https://corsproxy.io/?url=${encodeURIComponent(exportHtml)}`,{cache:'no-store'}),
-  // allorigins /get endpoint (returns JSON with contents field)
-  ()=>fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(exportTxt)}`,{cache:'no-store'}).then(async r=>{
-    const j=await r.json();
-    // fake a response-like object
-    return {ok:!!(j&&j.contents&&j.contents.length>20),text:()=>Promise.resolve(j.contents||'')};
-  }),
+const exportUrl=`https://docs.google.com/document/d/${docId}/export?format=txt`;
+const proxies=[
+u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+u=>`https://corsproxy.io/?url=${encodeURIComponent(u)}`,
+u=>`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
 ];
-
-for(const strategy of strategies){
-  try{
-    const r=await Promise.race([strategy(),new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),10000))]);
-    if(!r||!r.ok)continue;
-    let t=await r.text();
-    if(!t||t.length<20)continue;
-    // If we got HTML, strip tags to get plain text
-    if(t.trim().startsWith('<')&&t.includes('</html>')){
-      const tmp=document.createElement('div');
-      tmp.innerHTML=t;
-      t=tmp.innerText||tmp.textContent||'';
-    }
-    if(t&&t.length>20)return t;
-  }catch(e){/* try next */}
+// Try direct first
+try{
+const r=await Promise.race([fetch(exportUrl,{cache:'no-store'}),new Promise((_,rej)=>setTimeout(()=>rej(),6000))]);
+if(r&&r.ok){const t=await r.text();if(t&&t.length>50)return t;}
+}catch(e){}
+// Try proxies
+for(const makeUrl of proxies){
+try{
+const r=await Promise.race([fetch(makeUrl(exportUrl),{cache:'no-store'}),new Promise((_,rej)=>setTimeout(()=>rej(),8000))]);
+if(r&&r.ok){const t=await r.text();if(t&&t.length>50)return t;}
+}catch(e){}
 }
 return null;
 }
@@ -1176,9 +1099,7 @@ progressFill.style.width=`${Math.round((i/approved.length)*100)}%`;
 
 const docUrl=MEAL_DOC_URLS[mealName];
 if(!docUrl){
-// Check if we have ANY doc URLs at all — if not, sheet column D may not have loaded
-const hasAnyUrls=Object.keys(MEAL_DOC_URLS).length>0;
-notFound.push({meal:mealName,reason:hasAnyUrls?'No recipe linked in column D':'Sheet column D not loaded — try refreshing meals (↻ button)'});
+notFound.push({meal:mealName,reason:'No recipe linked'});
 continue;
 }
 const text=await fetchDocText(docUrl);
@@ -1200,15 +1121,9 @@ progressText.textContent='Building shopping list…';
 
 if(!allParsed.length){
 errorEl.style.display='block';
-const failDetail=notFound.map(({meal,reason})=>`${meal}: ${reason}`).join('<br>');
-errorEl.innerHTML=`<strong>Could not retrieve any recipes.</strong><br><br>
-Failures:<br>${failDetail}<br><br>
-Things to check:<br>
-• Each Google Doc must be shared as <em>"Anyone with the link can view"</em><br>
-• The link in column D of the spreadsheet must be the full Google Docs URL<br>
-• Try refreshing and generating again — proxy services occasionally time out`;
+errorEl.textContent='Could not retrieve any recipes. Check that your Google Docs are set to "Anyone with the link can view".';
 progressEl.style.display='none';
-btn.disabled=false;btn.textContent='Try again';
+btn.disabled=false;btn.textContent='Generate list';
 return;
 }
 
